@@ -6,9 +6,9 @@ Add content to a Pluto notebook using short function calls:
 
 - [x] QR code
 - [x] Twitter
-- [ ] YouTube
+- [x] YouTube (TODO: delayed start with corresponding frame)
 - [ ] Discourse  
 - [ ] Instagram(?)
-- [ ] Flickr
+- [x] Flickr
 - [ ] Vimeo
 
