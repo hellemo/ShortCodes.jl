@@ -1,9 +1,8 @@
 
-
 function qr(txt::String)
-    Gray.(convert.(Float64,.!(qrcode(txt))))
+    return Gray.(convert.(Float64, .!(qrcode(txt))))
 end
 
 function plainqr(txt::String)
-    qrcode(txt)
+    return qrcode(txt)
 end
