@@ -24,7 +24,7 @@ ShortCodes.qr("https://julialang.org/downloads/#current_stable_release")
 
 - [x] QR code
 - [x] Twitter
-- [x] YouTube (TODO: delayed start with corresponding frame)
+- [x] YouTube
 - [ ] Discourse  
 - [ ] Instagram(?)
 - [x] Flickr
