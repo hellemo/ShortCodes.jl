@@ -1,7 +1,7 @@
 name = "ShortCodes"
 uuid = "f62ebe17-55c5-4640-972f-b59c0dd11ccf"
 authors = ["hellemo "]
-version = "0.1.1"
+version = "0.1.2"
 
 [deps]
 HTTP = "cd3eb016-35fb-5094-929b-558a96fad6f3"
@@ -10,3 +10,4 @@ ImageMagick = "6218d12a-5da1-5696-b52f-db25d2ecc6d1"
 Images = "916415d5-f1e6-5110-898d-aaa5f9f070e0"
 JSON3 = "0f8b85d8-7281-11e9-16c2-39a750bddbf1"
 QRCode = "6cfbe66a-a49d-11e9-1842-750d329cfcbb"
+UUIDs = "cf7118a7-6976-5b1a-9a39-7adc72f591a4"

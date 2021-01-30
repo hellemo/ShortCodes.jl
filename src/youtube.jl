@@ -1,5 +1,5 @@
 function youtube(id)
-    url = "https://youtube.com/oembed?url=http://www.youtube.com/watch?v=$id&format=json&maxwidth=800"
+    url = "https://youtube.com/oembed?url=http://www.youtube.com/watch?v=$id&format=json&maxwidth=600&maxheight=500"
     response = HTTP.get(url)
     json = JSON3.read(String(response.body))
     return HTML(json[:html])
