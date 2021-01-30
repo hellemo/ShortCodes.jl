@@ -1,7 +1,13 @@
+"""
+    Embed youtube video id that seeks seekto seconds into the video and pauses there to 
+    make it possible to show a particular still from the video by default. Note that 
+    the youtube API disallows hiding the annoying "More videos" overlay. 
+"""
 function youtube(id, seekto)
+    vid = string(uuid1()) # Assign each video unique id to allow multiple instances.
     htm = """
    <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
-    <div id="player"></div>
+    <div id=" """ * vid * """ "></div>
 	<script src="https://www.youtube.com/iframe_api"></script>
     <script>
       // 2. This code loads the IFrame Player API code asynchronously.
@@ -15,7 +21,7 @@ function youtube(id, seekto)
       //    after the API code downloads.
       var player;
       function onYouTubeIframeAPIReady() {
-        player = new YT.Player('player', {
+        player = new YT.Player(' """ * vid * """ ', {
           height: '390',
           width: '640',
 		  rel: '0',
@@ -58,7 +64,9 @@ showinfo: '0',
         return HTML(htm)
 end
 
-
+"""
+    Embed youtube video by id, uses default oembed code with reasonable size.
+"""
 function youtube(id)
     url = "https://youtube.com/oembed?url=http://www.youtube.com/watch?v=$id&format=json&maxwidth=600&maxheight=500"
     response = HTTP.get(url)
