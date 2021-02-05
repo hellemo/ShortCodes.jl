@@ -25,8 +25,6 @@ ShortCodes.qr("https://julialang.org/downloads/#current_stable_release")
 - [x] QR code
 - [x] Twitter
 - [x] YouTube
-- [ ] Discourse  
-- [ ] Instagram(?)
 - [x] Flickr
-- [ ] Vimeo
+- [x] Vimeo
 
