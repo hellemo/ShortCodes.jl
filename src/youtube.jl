@@ -65,6 +65,14 @@ showinfo: '0',
 end
 
 """
+    Embed youtube video by id, seek to seektomin minutes and seektosek second in
+"""
+function youtube(id, seektomin, seektosec)
+    youtube(id, seektomin * 60 + seektosec)
+end
+
+
+"""
     Embed youtube video by id, uses default oembed code with reasonable size.
 """
 function youtube(id)

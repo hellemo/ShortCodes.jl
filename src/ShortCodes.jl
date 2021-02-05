@@ -11,5 +11,6 @@ using UUIDs
 include("qr.jl")
 include("twitter.jl")
 include("youtube.jl")
+include("misc.jl")
 
 end # module
