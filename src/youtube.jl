@@ -1,3 +1,19 @@
+struct YouTube <: ShortCode
+    id::String
+    seekto::Int32
+end
+
+function Base.show(io::IO, ::MIME"text/plain", video::YouTube)
+    video_as_text = "https://www.youtube.com/watch?v=$(video.id)&start=$(video.seekto)"
+    print(io, video_as_text)
+end
+
+function Base.show(io::IO, ::MIME"text/html", video::YouTube)
+    print(io, youtube(video.id, video.seekto))
+end
+
+YouTube(id, seektomin, seektosec) = YouTube(id, seektomin*60 + seektosec)
+
 """
     Embed youtube video id that seeks seekto seconds into the video and pauses there to 
     make it possible to show a particular still from the video by default. Note that 
@@ -61,7 +77,7 @@ showinfo: '0',
 	onYouTubeIframeAPIReady()
     </script>
 """
-        return HTML(htm)
+        return htm
 end
 
 """
@@ -82,9 +98,21 @@ function youtube(id)
     return HTML(json[:html])
 end
 
+struct Flickr <: ShortCode
+    url::String
+end
+
+function Base.show(io::IO, ::MIME"text/plain", img::Flickr)
+    print(io, img.url)
+end
+
+function Base.show(io::IO, ::MIME"text/html", img::Flickr)
+    print(io, flickr(img.url))
+end
+
 function flickr(flickr_url)
     url = "http://www.flickr.com/services/oembed/?format=json&url=$flickr_url"
     response = HTTP.get(url)
     json = JSON3.read(String(response.body))
-    return HTML(json[:html])
+    return json[:html]
 end
