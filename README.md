@@ -1,6 +1,8 @@
 # ShortCodes
 
-Simple functions to easily embed content a [Pluto](https://github.com/fonsp/Pluto.jl) notebook using short function calls, inspired by the [Hugo shortcodes](https://gohugo.io/content-management/shortcodes/).
+Simple functions to easily embed content in a [Pluto](https://github.com/fonsp/Pluto.jl) notebook using short function calls, inspired by the [Hugo shortcodes](https://gohugo.io/content-management/shortcodes/).
+
+The basic usage is shown below, check out the [examples](examples/static-demo.html) to get an impression of the resulting page.
 
 ## Usage
 
@@ -19,12 +21,3 @@ ShortCodes.flickr("https://www.flickr.com/photos/153311384@N03/29110717138")
 # Share string, e.g. a url with the audience of a presentation using QR code:
 ShortCodes.qr("https://julialang.org/downloads/#current_stable_release")
 ```
-
-## Support/WIP
-
-- [x] QR code
-- [x] Twitter
-- [x] YouTube
-- [x] Flickr
-- [x] Vimeo
-
