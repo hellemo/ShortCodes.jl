@@ -13,13 +13,13 @@ function Base.show(io::IO, ::MIME"text/html", video::YouTube)
 end
 
 YouTube(id, seektomin, seektosec) = YouTube(id, seektomin*60 + seektosec)
-
+YouTube(id) = YouTube(id, 0)
 """
     Embed youtube video id that seeks seekto seconds into the video and pauses there to 
     make it possible to show a particular still from the video by default. Note that 
     the youtube API disallows hiding the annoying "More videos" overlay. 
 """
-function youtube(id, seekto)
+@memoize function youtube(id, seekto)
     vid = string(uuid1()) # Assign each video unique id to allow multiple instances.
     htm = """
    <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
@@ -110,7 +110,7 @@ function Base.show(io::IO, ::MIME"text/html", img::Flickr)
     print(io, flickr(img.url))
 end
 
-function flickr(flickr_url)
+@memoize function flickr(flickr_url)
     url = "http://www.flickr.com/services/oembed/?format=json&url=$flickr_url"
     response = HTTP.get(url)
     json = JSON3.read(String(response.body))

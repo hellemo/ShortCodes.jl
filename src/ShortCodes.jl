@@ -6,6 +6,7 @@ using ImageIO
 using ImageMagick
 using Images
 using JSON3
+using Memoization
 using QRCode
 using UnicodePlots
 using UUIDs
