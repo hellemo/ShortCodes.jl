@@ -12,8 +12,9 @@ using ShortCodes
 # Embed tweet by id
 Twitter(1314967811626872842)
 
-# Embed youtube video by id and seek to start time
-YouTube("IAF8DjrQSSk",2,30)
+# Embed youtube video by id and seek to start 
+# time and pause to show custom still image
+YouTube("IAF8DjrQSSk", 2, 30) # 2 min 30 sec
 
 # Embed Flickr image by url
 Flickr("https://www.flickr.com/photos/153311384@N03/29110717138")
