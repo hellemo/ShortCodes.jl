@@ -1,6 +1,6 @@
 # ShortCodes
 
-Simple functions to easily embed content in a [Pluto](https://github.com/fonsp/Pluto.jl) notebook using short function calls, inspired by the [Hugo shortcodes](https://gohugo.io/content-management/shortcodes/).
+Simply embed content in a [Pluto](https://github.com/fonsp/Pluto.jl) notebook using short codes, inspired by the [Hugo shortcodes](https://gohugo.io/content-management/shortcodes/).
 
 The basic usage is shown below, check out the [example](https://htmlpreview.github.io/?https://github.com/hellemo/ShortCodes.jl/blob/main/examples/static-demo.html) to get an impression of the resulting page.
 
@@ -21,3 +21,8 @@ Flickr("https://www.flickr.com/photos/153311384@N03/29110717138")
 # Share string, e.g. a url, with the audience of a presentation using QR code:
 QRC("https://julialang.org/downloads/#current_stable_release")
 ```
+
+## Note
+
+* YouTube shows an overlay when the video is paused, promoting "more videos", and the API does not allow hiding it. A workaround is to [block the overlay using uBlock](https://www.reddit.com/r/firefox/comments/61y7lf/how_to_removedisable_more_videos_when_pausing_an/).
+* Some browsers may block content from social media, e.g. Firefox may block Twitter embeds, check the settings of your browser if it doesn't load.
