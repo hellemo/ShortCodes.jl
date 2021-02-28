@@ -16,8 +16,8 @@ Twitter(1314967811626872842)
 # time and pause to show custom still image
 YouTube("IAF8DjrQSSk", 2, 30) # 2 min 30 sec
 
-# Embed Flickr image by url
-Flickr("https://www.flickr.com/photos/153311384@N03/29110717138")
+# Embed Flickr image by id (or by url)
+Flickr(29110717138)
 
 # Share string, e.g. a url, with the audience of a presentation using QR code:
 QRC("https://julialang.org/downloads/#current_stable_release")

@@ -98,21 +98,25 @@ function youtube(id)
     return HTML(json[:html])
 end
 
-struct Flickr <: ShortCode
-    url::String
+struct Flickr <: ShortCode 
+    id::Integer
 end
 
+Flickr(url::String) = Flickr(parse(Int,split(url,"/")[6])) # This should be more robust
+
 function Base.show(io::IO, ::MIME"text/plain", img::Flickr)
-    print(io, img.url)
+    json = fetch_flickr(img.id)
+    flickr_as_text = "$(json[:author_name]): $(json[:title])\n$(json[:web_page])"
+    print(io, flickr_as_text)
 end
 
 function Base.show(io::IO, ::MIME"text/html", img::Flickr)
-    print(io, flickr(img.url))
+    json = fetch_flickr(img.id)
+    print(io, json[:html])
 end
 
-@memoize function flickr(flickr_url)
-    url = "http://www.flickr.com/services/oembed/?format=json&url=$flickr_url"
+@memoize function fetch_flickr(id)
+    url = "https://www.flickr.com/services/oembed/?format=json&url=http%3A//www.flickr.com/photos/bees/$id"
     response = HTTP.get(url)
     json = JSON3.read(String(response.body))
-    return json[:html]
 end

@@ -36,7 +36,7 @@ YouTube("IAF8DjrQSSk",18,27)
 md"# Flickr"
 
 # ╔═╡ 2fd210b8-0ba1-11eb-128c-810e34439a06
-Flickr("https://www.flickr.com/photos/153311384@N03/29110717138")
+Flickr(40405018053)
 
 # ╔═╡ 811dca06-742c-11eb-0e4b-8576a26c01f5
 md"# Embed Web Page"
