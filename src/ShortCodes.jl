@@ -23,6 +23,7 @@ include("kroki.jl")
 
 export ShortCode
 
+export BlockDiag
 export Flickr
 export GraphViz
 export Mermaid
