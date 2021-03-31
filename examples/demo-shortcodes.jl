@@ -13,12 +13,6 @@ md" # ShortCodes
 Simple embedding for [Pluto notebooks](https://github.com/fonsp/Pluto.jl)
 "
 
-# ╔═╡ bb593806-0a7e-11eb-3389-81a79313f990
-md"# QR Codes"
-
-# ╔═╡ e9f493ea-0a7e-11eb-2ceb-0928709fcac4
-QRC("https://julialang.org/downloads/#current_stable_release")
-
 # ╔═╡ c3b4bfac-0a7e-11eb-3eaf-c372ffb233bb
 md"# Twitter"
 
