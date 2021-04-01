@@ -4,58 +4,119 @@
 using Markdown
 using InteractiveUtils
 
-# ╔═╡ 164bb42e-0a6f-11eb-2c60-63d823f1e860
+# ╔═╡ a7288f0e-92c2-11eb-1f09-55b1249cddfc
 using ShortCodes
 
-# ╔═╡ de45d00a-0a6e-11eb-0619-f765841c235d
+# ╔═╡ b4638c6e-92c2-11eb-3455-297ca53dbf37
 md" # ShortCodes
 
 Simple embedding for [Pluto notebooks](https://github.com/fonsp/Pluto.jl)
 "
 
-# ╔═╡ c3b4bfac-0a7e-11eb-3eaf-c372ffb233bb
+# ╔═╡ bf967628-92c2-11eb-0794-654da6ac5292
 md"# Twitter"
 
-# ╔═╡ 7000252c-0b32-11eb-134b-ef4a978cee9c
+# ╔═╡ c4650640-92c2-11eb-2a5b-ed1dc13273ac
 Twitter(1314967811626872842)
 
-# ╔═╡ 0710e9b0-0ba1-11eb-31cf-9bed3d8c3e29
+# ╔═╡ c90a21b6-92c2-11eb-0020-cf0095378602
 md"# YouTube
 Embed a video and seek to the given point in the video (not shown in the static version)."
 
-# ╔═╡ 2178e9f6-0ba1-11eb-112e-a935e88f876b
+# ╔═╡ d5e1705e-92c2-11eb-2369-cba030f80467
 YouTube("IAF8DjrQSSk",18,27)
 
-# ╔═╡ 2807cdbc-0ba1-11eb-1191-1b6a3b539fb3
+# ╔═╡ db03ba94-92c2-11eb-0d9e-9382dc14f783
 md"# Flickr"
 
-# ╔═╡ 2fd210b8-0ba1-11eb-128c-810e34439a06
+# ╔═╡ e02ef00c-92c2-11eb-0036-e9f6a7a34ddc
 Flickr(29110717138)
 
-# ╔═╡ 811dca06-742c-11eb-0e4b-8576a26c01f5
+# ╔═╡ e7c836f4-92c2-11eb-3f84-77ffa870187e
 md"# Embed Web Page"
 
-# ╔═╡ a47425e4-7421-11eb-0f2b-b983f7fb7284
+# ╔═╡ e9db6308-92c2-11eb-0dda-09b6a1e6bb7e
 WebPage("https://julialang.org/downloads/#current_stable_release")
 
-# ╔═╡ 8a8a5256-742c-11eb-255f-3d849e91ab1c
+# ╔═╡ f2f0fdd6-92c2-11eb-2e52-c5ea0f9288fc
 md"# Vimeo"
 
-# ╔═╡ 47e531e6-7427-11eb-1a84-a3a1e3c9e860
+# ╔═╡ feb4b4e6-92c2-11eb-0fe8-895a5ee0b084
 Vimeo(171764413)
 
+# ╔═╡ 1cda6524-92c3-11eb-145d-333251ab7498
+md"# GraphViz"
+
+# ╔═╡ 23e1b908-92c3-11eb-07c7-79c227f37cd8
+GraphViz("digraph G {Hello->World}")
+
+# ╔═╡ f001ad0c-92c3-11eb-15dd-0b6029eba08c
+md"# Mermaid"
+
+# ╔═╡ faa2b3f2-92c3-11eb-36a2-b716c6113df4
+Mermaid("gantt
+section Section
+Completed :done,    des1, 2014-01-06,2014-01-08
+Active        :active,  des2, 2014-01-07, 3d
+Parallel 1   :         des3, after des1, 1d
+Parallel 2   :         des4, after des1, 1d
+Parallel 3   :         des5, after des3, 1d
+Parallel 4   :         des6, after des4, 1d")
+
+# ╔═╡ 05880a9e-92c4-11eb-1ca6-25556245f92d
+md"# BlockDiag"
+
+# ╔═╡ 0c92c8ea-92c4-11eb-08cd-f9e7d4cbdf24
+BlockDiag("""blockdiag {
+  Kroki -> generates -> "Block diagrams";
+  Kroki -> is -> "very easy!";
+
+  Kroki [color = "greenyellow"];
+  "Block diagrams" [color = "pink"];
+  "very easy!" [color = "orange"];
+}""")
+
+# ╔═╡ d4dd1922-92c4-11eb-3dff-a71dd1f96782
+md"# PlantUML"
+
+# ╔═╡ dcbec424-92c4-11eb-2ce6-d3ac255b3099
+PlantUML("@startmindmap
+skinparam monochrome true
++ OS
+++ Ubuntu
++++ Linux Mint
++++ Kubuntu
++++ Lubuntu
++++ KDE Neon
+++ LMDE
+++ SolydXK
+++ SteamOS
+++ Raspbian
+-- Windows 95
+-- Windows 98
+-- Windows NT
+--- Windows 8
+--- Windows 10
+@endmindmap")
+
 # ╔═╡ Cell order:
-# ╟─de45d00a-0a6e-11eb-0619-f765841c235d
-# ╠═164bb42e-0a6f-11eb-2c60-63d823f1e860
-# ╟─bb593806-0a7e-11eb-3389-81a79313f990
-# ╠═e9f493ea-0a7e-11eb-2ceb-0928709fcac4
-# ╟─c3b4bfac-0a7e-11eb-3eaf-c372ffb233bb
-# ╠═7000252c-0b32-11eb-134b-ef4a978cee9c
-# ╟─0710e9b0-0ba1-11eb-31cf-9bed3d8c3e29
-# ╠═2178e9f6-0ba1-11eb-112e-a935e88f876b
-# ╟─2807cdbc-0ba1-11eb-1191-1b6a3b539fb3
-# ╠═2fd210b8-0ba1-11eb-128c-810e34439a06
-# ╟─811dca06-742c-11eb-0e4b-8576a26c01f5
-# ╠═a47425e4-7421-11eb-0f2b-b983f7fb7284
-# ╟─8a8a5256-742c-11eb-255f-3d849e91ab1c
-# ╠═47e531e6-7427-11eb-1a84-a3a1e3c9e860
+# ╠═a7288f0e-92c2-11eb-1f09-55b1249cddfc
+# ╟─b4638c6e-92c2-11eb-3455-297ca53dbf37
+# ╟─bf967628-92c2-11eb-0794-654da6ac5292
+# ╠═c4650640-92c2-11eb-2a5b-ed1dc13273ac
+# ╟─c90a21b6-92c2-11eb-0020-cf0095378602
+# ╠═d5e1705e-92c2-11eb-2369-cba030f80467
+# ╟─db03ba94-92c2-11eb-0d9e-9382dc14f783
+# ╠═e02ef00c-92c2-11eb-0036-e9f6a7a34ddc
+# ╟─e7c836f4-92c2-11eb-3f84-77ffa870187e
+# ╠═e9db6308-92c2-11eb-0dda-09b6a1e6bb7e
+# ╟─f2f0fdd6-92c2-11eb-2e52-c5ea0f9288fc
+# ╠═feb4b4e6-92c2-11eb-0fe8-895a5ee0b084
+# ╟─1cda6524-92c3-11eb-145d-333251ab7498
+# ╠═23e1b908-92c3-11eb-07c7-79c227f37cd8
+# ╟─f001ad0c-92c3-11eb-15dd-0b6029eba08c
+# ╠═faa2b3f2-92c3-11eb-36a2-b716c6113df4
+# ╟─05880a9e-92c4-11eb-1ca6-25556245f92d
+# ╠═0c92c8ea-92c4-11eb-08cd-f9e7d4cbdf24
+# ╟─d4dd1922-92c4-11eb-3dff-a71dd1f96782
+# ╠═dcbec424-92c4-11eb-2ce6-d3ac255b3099
