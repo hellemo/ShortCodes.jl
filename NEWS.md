@@ -1,5 +1,9 @@
 # ShortCodes Release Notes
 
+## v0.3.1 (2021-04-11)
+
+* Improve loading of YouTube videos
+
 ## v0.3.0 (2021-04-01)
 
 * Breaking change: Factored out support for QR codes due to:

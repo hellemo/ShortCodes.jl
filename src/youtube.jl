@@ -1,3 +1,5 @@
+
+
 struct YouTube <: ShortCode
     id::String
     seekto::Int32
@@ -22,11 +24,9 @@ YouTube(id) = YouTube(id, 0)
 @memoize function youtube(id, seekto)
     vid = string(uuid1()) # Assign each video unique id to allow multiple instances.
     htm = """
-   <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
     <div id=" """ * vid * """ "></div>
-	<script src="https://www.youtube.com/iframe_api"></script>
     <script>
-      // 2. This code loads the IFrame Player API code asynchronously.
+    // 2. This code loads the IFrame Player API code asynchronously.
       var tag = document.createElement('script');
 
       tag.src = "https://www.youtube.com/iframe_api";
@@ -51,6 +51,7 @@ showinfo: '0',
             'onStateChange': onPlayerStateChange
           }
         });
+        
       }
 
       // 4. The API will call this function when the video player is ready.
@@ -71,10 +72,19 @@ showinfo: '0',
         }
       }
       function stopVideo() {
-        player.pauseVideo()
-		//player.stopVideo();
+        player.pauseVideo();
       }
-	onYouTubeIframeAPIReady()
+      
+      // Check if YT is loaded before trying to start player
+      function pollYT () {
+        if (typeof(YT) == 'undefined') {
+            setTimeout(pollYT, 300); // try again in 300 milliseconds
+        } else {
+            onYouTubeIframeAPIReady();
+        }
+      }
+
+      pollYT();
     </script>
 """
         return htm
