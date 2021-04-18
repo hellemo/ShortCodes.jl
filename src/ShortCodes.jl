@@ -4,7 +4,7 @@ using Base64
 using CodecZlib
 using HTTP
 using JSON3
-using Memoization
+using Memoize
 using UUIDs
 
 abstract type ShortCode end
