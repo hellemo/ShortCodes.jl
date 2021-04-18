@@ -19,6 +19,8 @@ YouTube("IAF8DjrQSSk", 2, 30) # 2 min 30 sec
 # Embed Flickr image by id (or by url)
 Flickr(29110717138)
 
+# Show DOI info from opencitations.net
+DOI("10.1137/141000671")
 ```
 
 ## Note

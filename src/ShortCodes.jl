@@ -9,6 +9,7 @@ using UUIDs
 
 abstract type ShortCode end
 
+include("doi.jl")
 include("twitter.jl")
 include("youtube.jl")
 include("misc.jl")
@@ -17,6 +18,7 @@ include("kroki.jl")
 export ShortCode
 
 export BlockDiag
+export DOI, EmDOI, ShortDOI
 export Flickr
 export GraphViz
 export Mermaid

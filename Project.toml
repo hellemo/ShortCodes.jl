@@ -1,7 +1,7 @@
 name = "ShortCodes"
 uuid = "f62ebe17-55c5-4640-972f-b59c0dd11ccf"
 authors = ["Lars Hellemo <hellemo@gmail.com> "]
-version = "0.3.1"
+version = "0.3.2"
 
 [deps]
 Base64 = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
@@ -15,5 +15,5 @@ UUIDs = "cf7118a7-6976-5b1a-9a39-7adc72f591a4"
 CodecZlib = "0.7"
 HTTP = "0.9"
 JSON3 = "1"
-Memoization = "0.1"
+Memoization = "0.1.5" # Issue with 0.1.6
 julia = "^1.5"

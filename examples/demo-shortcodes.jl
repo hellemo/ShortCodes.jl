@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.12.21
+# v0.14.2
 
 using Markdown
 using InteractiveUtils
@@ -43,6 +43,13 @@ md"# Vimeo"
 
 # ╔═╡ feb4b4e6-92c2-11eb-0fe8-895a5ee0b084
 Vimeo(171764413)
+
+# ╔═╡ 96e66150-c4bb-4c77-b752-d04f8d366bca
+md"# DOI
+DOI information via [opencitations.net](https://opencitations.net) and [doi.org](https://doi.org)"
+
+# ╔═╡ 8079cb71-95d7-4849-b5a4-abbb43f038f8
+DOI("10.1137/141000671")
 
 # ╔═╡ 1cda6524-92c3-11eb-145d-333251ab7498
 md"# GraphViz"
@@ -112,6 +119,8 @@ skinparam monochrome true
 # ╠═e9db6308-92c2-11eb-0dda-09b6a1e6bb7e
 # ╟─f2f0fdd6-92c2-11eb-2e52-c5ea0f9288fc
 # ╠═feb4b4e6-92c2-11eb-0fe8-895a5ee0b084
+# ╟─96e66150-c4bb-4c77-b752-d04f8d366bca
+# ╠═8079cb71-95d7-4849-b5a4-abbb43f038f8
 # ╟─1cda6524-92c3-11eb-145d-333251ab7498
 # ╠═23e1b908-92c3-11eb-07c7-79c227f37cd8
 # ╟─f001ad0c-92c3-11eb-15dd-0b6029eba08c
