@@ -8,9 +8,10 @@ struct DOI <: AbstractDOI
 end
 struct ShortDOI <: AbstractDOI
     shortdoi
+    ShortDOI(doi::String) = length(doi) > 10 ? new(shortdoi(DOI(doi))) : new(doi)
 end
 EmDOI(doi::String) = EmDOI(doi, "")
-ShortDOI(doi::AbstractDOI) = ShortDOI(fetch_shortdoi(doi).ShortDOI)
+ShortDOI(doi::AbstractDOI) = ShortDOI(shortdoi(doi))
 
 function Base.getproperty(obj::AbstractDOI, sym::Symbol)
     if sym == :doi
@@ -29,7 +30,7 @@ getdoi(obj::AbstractDOI) = getfield(obj, :doi)
 getdoi(obj::ShortDOI) = expand(obj)
 
 function Base.show(io::IO, ::MIME"text/plain", doi::AbstractDOI)
-    print(io, join((doi.author, doi.title, string(doi.year), doi.doi), " "))
+    print(io, join((doi.author, doi.title, string(doi.year), shortdoi(doi)), " "))
 end
 
 function Base.show(io::IO, ::MIME"text/html", doi::AbstractDOI)
