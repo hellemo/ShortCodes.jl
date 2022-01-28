@@ -41,7 +41,7 @@ end
 function Base.show(io::IO, ::MIME"text/html", dois::Array{T} where T<:AbstractDOI)
     print(io, "<ol>")
     for doi in dois
-        print(io, "<li>$(emph_author(doi))) <em>$(doi.title)</em>, $(doi.source_title) ($(doi.year))
+        print(io, "<li>$(emph_author(doi)) <em>$(doi.title)</em>, $(doi.source_title) ($(doi.year))
         <a href=https://doi.org/$(shortdoi(doi))>$(shortdoi(doi))</a>, cited by $(doi.citation_count)</li>")
     end
     print(io, "</ol>")
@@ -62,7 +62,7 @@ end
 
 @memoize function fetch_shortdoi(doi::String)
     r = HTTP.get("https://shortdoi.org/$(doi)?format=json")
-    rj = JSON3.read(r.body)
+    return JSON3.read(r.body)
 end
 """
     expand(doi::ShortDOI)
@@ -87,6 +87,8 @@ function emph_author(doi::EmDOI)
     emph_author(doi.author, doi.highlight)
 end
 function emph_author(authors, author="", em="b")
+    orcid = r", \d{4}-\d{4}-\d{4}-\d{4}"
+    authors = replace(authors,  orcid => "")
     if length(author) > 2
         names = split(author)
         lnfirst = names[end] * ", " * names[1]
