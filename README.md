@@ -2,7 +2,7 @@
 
 Simply embed content in a [Pluto](https://github.com/fonsp/Pluto.jl) notebook using short codes, inspired by the [Hugo shortcodes](https://gohugo.io/content-management/shortcodes/).
 
-The basic usage is shown below, check out the [example](https://htmlpreview.github.io/?https://github.com/hellemo/ShortCodes.jl/blob/main/examples/static-demo.html) to get an impression of the resulting page.
+The basic usage is shown below, check out the [example](https://raw.githack.com/hellemo/ShortCodes.jl/main/examples/static-demo.html) to get an impression of the resulting page.
 
 ## Usage
 
