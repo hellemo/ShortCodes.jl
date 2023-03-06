@@ -34,19 +34,15 @@ function Base.show(io::IO, ::MIME"text/plain", doi::AbstractDOI)
 end
 
 function Base.show(io::IO, ::MIME"text/html", doi::AbstractDOI)
-    # print(io, "<div>$(emph_author(doi)) <em>$(doi.title)</em>, $(doi.title) ($(doi.pub_date))
-    #  <a href=https://doi.org/$(shortdoi(doi))>$(shortdoi(doi))</a>, cited by $(doi.citation_count)</div>")
     print(io, "<div>$(emph_author(doi)) <em>$(doi.title)</em>, $(doi.title) ($(year(doi.pub_date)))
-     <a href=https://doi.org/$(shortdoi(doi))>$(shortdoi(doi))</a></div>")
+     <a href=https://doi.org/$(shortdoi(doi))>$(shortdoi(doi))</a>, cited by $(fetch_citation_count(doi.doi))</div>")
 end
 
 function Base.show(io::IO, ::MIME"text/html", dois::Array{T} where T<:AbstractDOI)
     print(io, "<ol>")
     for doi in dois
-        # print(io, "<li>$(emph_author(doi)) <em>$(doi.title)</em>, $(doi.title) ($(doi.pub_date))
-        # <a href=https://doi.org/$(shortdoi(doi))>$(shortdoi(doi))</a>, cited by $(doi.citation_count)</li>")
         print(io, "<li>$(emph_author(doi)) <em>$(doi.title)</em>, $(doi.title) ($(year(doi.pub_date)))
-        <a href=https://doi.org/$(shortdoi(doi))>$(shortdoi(doi))</a></li>")
+        <a href=https://doi.org/$(shortdoi(doi))>$(shortdoi(doi))</a>, cited by $(fetch_citation_count(doi.doi))</li>")
     end
     print(io, "</ol>")
 end
@@ -56,6 +52,11 @@ end
     r = HTTP.get("https://w3id.org/oc/meta/api/v1/metadata/doi:$(doi)")
     rj = JSON3.read(r.body)
     return rj[1]
+end
+@memoize function fetch_citation_count(doi)
+    r = HTTP.get("https://opencitations.net/index/api/v1/citation-count/$(doi)")
+    rj = JSON3.read(r.body)
+    return parse(Int, rj[1][:count])
 end
 
 @memoize shortdoi(doi::AbstractDOI) = fetch_shortdoi(doi).ShortDOI
