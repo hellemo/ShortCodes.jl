@@ -16,9 +16,9 @@ ShortDOI(doi::AbstractDOI) = ShortDOI(shortdoi(doi))
 function Base.getproperty(obj::AbstractDOI, sym::Symbol)
     if sym == :doi
         return getdoi(obj)                                  # different for ShortDOI
-    elseif sym in [:author, :title, :source_title, :page]   # string types
+    elseif sym in [:author, :title, :page, :pub_date]   # string types
         return fetch_metadata(obj)[sym]
-    elseif sym in [:year, :volume, :citation_count, :issue] # integer types
+    elseif sym in [:volume, :citation_count, :issue] # integer types
         return parse(Int, fetch_metadata(obj)[sym])
     elseif sym == :reference                                # DOI type
         return split(fetch_metadata(obj)[sym], ";") .|> x->DOI(replace(x, " "=>""))
@@ -30,26 +30,30 @@ getdoi(obj::AbstractDOI) = getfield(obj, :doi)
 getdoi(obj::ShortDOI) = expand(obj)
 
 function Base.show(io::IO, ::MIME"text/plain", doi::AbstractDOI)
-    print(io, join((doi.author, doi.title, string(doi.year), shortdoi(doi)), " "))
+    print(io, join((doi.author, doi.title, string(doi.pub_date), shortdoi(doi)), " "))
 end
 
 function Base.show(io::IO, ::MIME"text/html", doi::AbstractDOI)
-    print(io, "<div>$(emph_author(doi)) <em>$(doi.title)</em>, $(doi.source_title) ($(doi.year))
-     <a href=https://doi.org/$(shortdoi(doi))>$(shortdoi(doi))</a>, cited by $(doi.citation_count)</div>")
+    # print(io, "<div>$(emph_author(doi)) <em>$(doi.title)</em>, $(doi.title) ($(doi.pub_date))
+    #  <a href=https://doi.org/$(shortdoi(doi))>$(shortdoi(doi))</a>, cited by $(doi.citation_count)</div>")
+    print(io, "<div>$(emph_author(doi)) <em>$(doi.title)</em>, $(doi.title) ($(doi.pub_date))
+     <a href=https://doi.org/$(shortdoi(doi))>$(shortdoi(doi))</a></div>")
 end
 
 function Base.show(io::IO, ::MIME"text/html", dois::Array{T} where T<:AbstractDOI)
     print(io, "<ol>")
     for doi in dois
-        print(io, "<li>$(emph_author(doi)) <em>$(doi.title)</em>, $(doi.source_title) ($(doi.year))
-        <a href=https://doi.org/$(shortdoi(doi))>$(shortdoi(doi))</a>, cited by $(doi.citation_count)</li>")
+        # print(io, "<li>$(emph_author(doi)) <em>$(doi.title)</em>, $(doi.title) ($(doi.pub_date))
+        # <a href=https://doi.org/$(shortdoi(doi))>$(shortdoi(doi))</a>, cited by $(doi.citation_count)</li>")
+        print(io, "<li>$(emph_author(doi)) <em>$(doi.title)</em>, $(doi.title) ($(doi.pub_date))
+        <a href=https://doi.org/$(shortdoi(doi))>$(shortdoi(doi))</a></li>")
     end
     print(io, "</ol>")
 end
 
 @memoize function fetch_metadata(doi::AbstractDOI) fetch_metadata(doi.doi) end
 @memoize function fetch_metadata(doi)
-    r = HTTP.get("https://opencitations.net/index/api/v1/metadata/$(doi)")
+    r = HTTP.get("https://w3id.org/oc/meta/api/v1/metadata/doi:$(doi)")
     rj = JSON3.read(r.body)
     return rj[1]
 end
