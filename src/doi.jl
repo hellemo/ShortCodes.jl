@@ -36,7 +36,7 @@ end
 function Base.show(io::IO, ::MIME"text/html", doi::AbstractDOI)
     # print(io, "<div>$(emph_author(doi)) <em>$(doi.title)</em>, $(doi.title) ($(doi.pub_date))
     #  <a href=https://doi.org/$(shortdoi(doi))>$(shortdoi(doi))</a>, cited by $(doi.citation_count)</div>")
-    print(io, "<div>$(emph_author(doi)) <em>$(doi.title)</em>, $(doi.title) ($(doi.pub_date))
+    print(io, "<div>$(emph_author(doi)) <em>$(doi.title)</em>, $(doi.title) ($(year(doi.pub_date)))
      <a href=https://doi.org/$(shortdoi(doi))>$(shortdoi(doi))</a></div>")
 end
 
@@ -45,7 +45,7 @@ function Base.show(io::IO, ::MIME"text/html", dois::Array{T} where T<:AbstractDO
     for doi in dois
         # print(io, "<li>$(emph_author(doi)) <em>$(doi.title)</em>, $(doi.title) ($(doi.pub_date))
         # <a href=https://doi.org/$(shortdoi(doi))>$(shortdoi(doi))</a>, cited by $(doi.citation_count)</li>")
-        print(io, "<li>$(emph_author(doi)) <em>$(doi.title)</em>, $(doi.title) ($(doi.pub_date))
+        print(io, "<li>$(emph_author(doi)) <em>$(doi.title)</em>, $(doi.title) ($(year(doi.pub_date)))
         <a href=https://doi.org/$(shortdoi(doi))>$(shortdoi(doi))</a></li>")
     end
     print(io, "</ol>")
@@ -85,10 +85,10 @@ end
 Add emphasis to selected author display (e.g. for CV use)
 """
 function emph_author(doi::AbstractDOI)
-    emph_author(doi.author)
+    emph_author(strip(doi.author))
 end
 function emph_author(doi::EmDOI)
-    emph_author(doi.author, doi.highlight)
+    emph_author(strip(doi.author), doi.highlight)
 end
 function emph_author(authors, author="", em="b")
     orcid = r", \d{4}-\d{4}-\d{4}-\d{4}"
@@ -101,4 +101,12 @@ function emph_author(authors, author="", em="b")
     else
         return authors
     end
+end
+
+
+function strip(s)
+    return replace(s, r" \[(.*?)\]"=>"")
+end
+function year(s)
+    return parse(Int, first(s, 4))
 end
