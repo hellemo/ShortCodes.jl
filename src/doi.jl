@@ -14,8 +14,10 @@ EmDOI(doi::String) = EmDOI(doi, "")
 ShortDOI(doi::AbstractDOI) = ShortDOI(shortdoi(doi))
 
 function Base.getproperty(obj::AbstractDOI, sym::Symbol)
-    if sym == :doi
-        return getdoi(obj)                                  # different for ShortDOI
+    sym == :doi && return getdoi(obj)  
+    sym == :year && return year(obj.pub_date)
+    if sym == :journal
+        return strip(obj.venue)
     elseif sym in [:author, :title, :page, :pub_date, :venue]   # string types
         return fetch_metadata(obj)[sym]
     elseif sym in [:volume, :citation_count, :issue] # integer types
@@ -34,15 +36,15 @@ function Base.show(io::IO, ::MIME"text/plain", doi::AbstractDOI)
 end
 
 function Base.show(io::IO, ::MIME"text/html", doi::AbstractDOI)
-    print(io, "<div>$(emph_author(doi)) <em>$(doi.title)</em>, $(strip(doi.venue)) ($(year(doi.pub_date)))
-     <a href=https://doi.org/$(shortdoi(doi))>$(shortdoi(doi))</a>, cited by $(fetch_citation_count(doi.doi))</div>")
+    print(io, "<div>$(emph_author(doi)) <em>$(doi.title)</em>, $(doi.journal) ($(doi.year))
+     <a href=https://doi.org/$(shortdoi(doi))>$(shortdoi(doi))</a>, cited by $(fetch_citation_count(getdoi(doi)))</div>")
 end
 
 function Base.show(io::IO, ::MIME"text/html", dois::Array{T} where T<:AbstractDOI)
     print(io, "<ol>")
     for doi in dois
-        print(io, "<li>$(emph_author(doi)) <em>$(doi.title)</em>, $(strip(doi.venue)) ($(year(doi.pub_date)))
-        <a href=https://doi.org/$(shortdoi(doi))>$(shortdoi(doi))</a>, cited by $(fetch_citation_count(doi.doi))</li>")
+        print(io, "<li>$(emph_author(doi)) <em>$(doi.title)</em>, $(doi.journal) ($(doi.year))
+        <a href=https://doi.org/$(shortdoi(doi))>$(shortdoi(doi))</a>, cited by $(fetch_citation_count(getdoi(doi)))</li>")
     end
     print(io, "</ol>")
 end
@@ -53,6 +55,7 @@ end
     rj = JSON3.read(r.body)
     return rj[1]
 end
+fetch_citation_count(doi::AbstractDOI) = fetch_citation_count(doi.doi)
 @memoize function fetch_citation_count(doi)
     r = HTTP.get("https://opencitations.net/index/api/v1/citation-count/$(doi)")
     rj = JSON3.read(r.body)
