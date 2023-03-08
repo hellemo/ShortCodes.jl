@@ -8,14 +8,17 @@ struct DOI{T<:AbstractString} <: AbstractDOI
 end
 struct ShortDOI{T<:AbstractString} <: AbstractDOI
     shortdoi::T
-    ShortDOI(doi::String) = length(doi) > 10 ? new(shortdoi(DOI(doi))) : new(doi)
+    ShortDOI(doi::String) =
+        length(doi) > 10 ? new{String}(shortdoi(DOI{String}(doi))) : new{String}(doi)
 end
-EmDOI(doi::String) = EmDOI(doi, "")
-ShortDOI(doi::AbstractDOI) = ShortDOI(shortdoi(doi))
+DOI(doi::String) = DOI{String}(doi)
+EmDOI(doi::String) = EmDOI{String}(doi, "")
+ShortDOI(doi::AbstractDOI) = ShortDOI{String}(shortdoi(doi))
 
 function Base.getproperty(obj::AbstractDOI, sym::Symbol)
     sym == :doi && return getdoi(obj)
     sym == :year && return year(obj.pub_date)
+    sym == :citation_count && return fetch_citation_count(getdoi(obj))
     if sym == :journal
         return strip(obj.venue)
     elseif sym in [:author, :title, :page, :pub_date, :venue]   # string types
