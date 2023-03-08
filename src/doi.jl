@@ -13,7 +13,8 @@ struct ShortDOI{T<:AbstractString} <: AbstractDOI
 end
 DOI(doi::String) = DOI{String}(doi)
 EmDOI(doi::String) = EmDOI{String}(doi, "")
-ShortDOI(doi::AbstractDOI) = ShortDOI{String}(shortdoi(doi))
+EmDOI(doi::AbstractDOI, em::AbstractString) = EmDOI(doi.doi, em)
+ShortDOI(doi::AbstractDOI) = ShortDOI(shortdoi(doi))
 
 function Base.getproperty(obj::AbstractDOI, sym::Symbol)
     sym == :doi && return getdoi(obj)
