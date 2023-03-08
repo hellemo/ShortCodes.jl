@@ -1,7 +1,7 @@
 name = "ShortCodes"
 uuid = "f62ebe17-55c5-4640-972f-b59c0dd11ccf"
 authors = ["Lars Hellemo <hellemo@gmail.com> "]
-version = "0.3.4"
+version = "0.3.5"
 
 [deps]
 Base64 = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"

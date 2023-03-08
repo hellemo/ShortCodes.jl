@@ -10,8 +10,17 @@ function Base.show(io::IO, ::MIME"text/html", page::WebPage)
     print(io, webpage(page.url))
 end
 
-function webpage(url="", height=400, width=700, title="")
-    htm = """<iframe src=" """* url * """ " height=" """ * string(height) * """ " width=" """ * string(width) * """ " title=" """ * title * """ "></iframe>"""
+function webpage(url = "", height = 400, width = 700, title = "")
+    htm =
+        """<iframe src=" """ *
+        url *
+        """ " height=" """ *
+        string(height) *
+        """ " width=" """ *
+        string(width) *
+        """ " title=" """ *
+        title *
+        """ "></iframe>"""
     return htm
 end
 

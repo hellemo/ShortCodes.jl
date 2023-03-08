@@ -1,27 +1,33 @@
 abstract type AbstractDOI <: ShortCode end
-struct EmDOI <: AbstractDOI
-    doi
-    highlight # Author to highlight when displaying
+struct EmDOI{T<:AbstractString} <: AbstractDOI
+    doi::T
+    highlight::T # Author to highlight when displaying
 end
-struct DOI <: AbstractDOI
-    doi
+struct DOI{T<:AbstractString} <: AbstractDOI
+    doi::T
 end
-struct ShortDOI <: AbstractDOI
-    shortdoi
-    ShortDOI(doi::String) = length(doi) > 10 ? new(shortdoi(DOI(doi))) : new(doi)
+struct ShortDOI{T<:AbstractString} <: AbstractDOI
+    shortdoi::T
+    ShortDOI(doi::String) =
+        length(doi) > 10 ? new{String}(shortdoi(DOI{String}(doi))) : new{String}(doi)
 end
-EmDOI(doi::String) = EmDOI(doi, "")
+DOI(doi::String) = DOI{String}(doi)
+EmDOI(doi::String) = EmDOI{String}(doi, "")
+EmDOI(doi::AbstractDOI, em::AbstractString) = EmDOI(doi.doi, em)
 ShortDOI(doi::AbstractDOI) = ShortDOI(shortdoi(doi))
 
 function Base.getproperty(obj::AbstractDOI, sym::Symbol)
-    if sym == :doi
-        return getdoi(obj)                                  # different for ShortDOI
-    elseif sym in [:author, :title, :source_title, :page]   # string types
+    sym == :doi && return getdoi(obj)
+    sym == :year && return year(obj.pub_date)
+    sym == :citation_count && return fetch_citation_count(getdoi(obj))
+    if sym == :journal
+        return strip(obj.venue)
+    elseif sym in [:author, :title, :page, :pub_date, :venue]   # string types
         return fetch_metadata(obj)[sym]
-    elseif sym in [:year, :volume, :citation_count, :issue] # integer types
+    elseif sym in [:volume, :citation_count, :issue] # integer types
         return parse(Int, fetch_metadata(obj)[sym])
     elseif sym == :reference                                # DOI type
-        return split(fetch_metadata(obj)[sym], ";") .|> x->DOI(replace(x, " "=>""))
+        return split(fetch_metadata(obj)[sym], ";") .|> x -> DOI(replace(x, " " => ""))
     else # fallback to getfield
         return getfield(obj, sym)
     end
@@ -30,28 +36,42 @@ getdoi(obj::AbstractDOI) = getfield(obj, :doi)
 getdoi(obj::ShortDOI) = expand(obj)
 
 function Base.show(io::IO, ::MIME"text/plain", doi::AbstractDOI)
-    print(io, join((doi.author, doi.title, string(doi.year), shortdoi(doi)), " "))
+    print(io, join((doi.author, doi.title, string(doi.pub_date), shortdoi(doi)), " "))
 end
 
 function Base.show(io::IO, ::MIME"text/html", doi::AbstractDOI)
-    print(io, "<div>$(emph_author(doi)) <em>$(doi.title)</em>, $(doi.source_title) ($(doi.year))
-     <a href=https://doi.org/$(shortdoi(doi))>$(shortdoi(doi))</a>, cited by $(doi.citation_count)</div>")
+    print(
+        io,
+        "<div>$(emph_author(doi)) <em>$(doi.title)</em>, $(doi.journal) ($(doi.year))
+<a href=https://doi.org/$(shortdoi(doi))>$(shortdoi(doi))</a>, cited by $(fetch_citation_count(getdoi(doi)))</div>",
+    )
 end
 
-function Base.show(io::IO, ::MIME"text/html", dois::Array{T} where T<:AbstractDOI)
+function Base.show(io::IO, ::MIME"text/html", dois::Array{T} where {T<:AbstractDOI})
     print(io, "<ol>")
     for doi in dois
-        print(io, "<li>$(emph_author(doi)) <em>$(doi.title)</em>, $(doi.source_title) ($(doi.year))
-        <a href=https://doi.org/$(shortdoi(doi))>$(shortdoi(doi))</a>, cited by $(doi.citation_count)</li>")
+        print(
+            io,
+            "<li>$(emph_author(doi)) <em>$(doi.title)</em>, $(doi.journal) ($(doi.year))
+  <a href=https://doi.org/$(shortdoi(doi))>$(shortdoi(doi))</a>, cited by $(fetch_citation_count(getdoi(doi)))</li>",
+        )
     end
     print(io, "</ol>")
 end
 
-@memoize function fetch_metadata(doi::AbstractDOI) fetch_metadata(doi.doi) end
+@memoize function fetch_metadata(doi::AbstractDOI)
+    fetch_metadata(doi.doi)
+end
 @memoize function fetch_metadata(doi)
-    r = HTTP.get("https://opencitations.net/index/api/v1/metadata/$(doi)")
+    r = HTTP.get("https://w3id.org/oc/meta/api/v1/metadata/doi:$(doi)")
     rj = JSON3.read(r.body)
     return rj[1]
+end
+fetch_citation_count(doi::AbstractDOI) = fetch_citation_count(doi.doi)
+@memoize function fetch_citation_count(doi)
+    r = HTTP.get("https://opencitations.net/index/api/v1/citation-count/$(doi)")
+    rj = JSON3.read(r.body)
+    return parse(Int, rj[1][:count])
 end
 
 @memoize shortdoi(doi::AbstractDOI) = fetch_shortdoi(doi).ShortDOI
@@ -81,20 +101,34 @@ end
 Add emphasis to selected author display (e.g. for CV use)
 """
 function emph_author(doi::AbstractDOI)
-    emph_author(doi.author)
+    emph_author(strip(doi.author))
 end
 function emph_author(doi::EmDOI)
-    emph_author(doi.author, doi.highlight)
+    emph_author(strip(doi.author), doi.highlight)
 end
-function emph_author(authors, author="", em="b")
+function emph_author(authors, author = "", em = "b")
     orcid = r", \d{4}-\d{4}-\d{4}-\d{4}"
-    authors = replace(authors,  orcid => "")
+    authors = replace(authors, orcid => "")
     if length(author) > 2
         names = split(author)
         lnfirst = names[end] * ", " * names[1]
         short = names[end] * ", " * names[1][1] * "."
-        return replace(replace(replace(authors, author => "<$em>"*author*"</$em>"),short=>"<$em>"*short*"</$em>"),lnfirst => "<$em>" * lnfirst * "</$em>")
+        return replace(
+            replace(
+                replace(authors, author => "<$em>" * author * "</$em>"),
+                short => "<$em>" * short * "</$em>",
+            ),
+            lnfirst => "<$em>" * lnfirst * "</$em>",
+        )
     else
         return authors
     end
+end
+
+
+function strip(s)
+    return replace(s, r" \[(.*?)\]" => "")
+end
+function year(s)
+    return parse(Int, first(s, 4))
 end
