@@ -61,11 +61,12 @@ end
 
 """
     meta-data structure from API: https://w3id.org/oc/meta/api/v1/metadata/
-""" function metadata_template(doi::String)
+"""
+function metadata_template(doi::String)
     fields = (:publisher, :pub_date, :page, :venue, :issue, :editor, :author, :id, :volume, :title, :type)
-    r1 = Dict(f=>"\u0000" for f in fields)
-    r1[:id] = doi
-    return r1
+    rj = Dict(f => "\u0000" for f in fields)
+    rj[:id] = doi
+    return rj
 end
 
 @memoize function fetch_metadata(doi::AbstractDOI)
@@ -119,7 +120,7 @@ end
 function emph_author(doi::EmDOI)
     emph_author(strip(doi.author), doi.highlight)
 end
-function emph_author(authors, author = "", em = "b")
+function emph_author(authors, author="", em="b")
     orcid = r", \d{4}-\d{4}-\d{4}-\d{4}"
     authors = replace(authors, orcid => "")
     if length(author) > 2
@@ -142,6 +143,7 @@ end
 function strip(s)
     return replace(s, r" \[(.*?)\]" => "")
 end
+
 function year(s)
-    return !isempty(s) ? parse(Int, first(s, 4)) : "\u0000"
+    return !isempty(s) && s != "\0" ? parse(Int, first(s, 4)) : nothing
 end
