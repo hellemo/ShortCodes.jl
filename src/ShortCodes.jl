@@ -2,12 +2,19 @@ module ShortCodes
 
 using Base64
 using CodecZlib
-using HTTP
+using Downloads
+using URIs
 using JSON3
 using Memoize
 using UUIDs
 
 abstract type ShortCode end
+
+function http_get(url; kwargs...)
+	io = IOBuffer()
+	Downloads.request(url; output=io, kwargs...)
+	read(seekstart(io))
+end
 
 include("doi.jl")
 include("twitter.jl")
