@@ -44,5 +44,5 @@ function base64urlencode(text)
 end
 
 function compress(text)
-    return transcode(ZlibCompressor, text)
+    return transcode(ZlibCompressor, codeunits(text))
 end
