@@ -112,8 +112,7 @@ end
 """
 function youtube(id)
     url = "https://youtube.com/oembed?url=http://www.youtube.com/watch?v=$id&format=json&maxwidth=600&maxheight=500"
-    response = HTTP.get(url)
-    json = JSON3.read(String(response.body))
+    json = JSON3.read(http_get(url))
     return HTML(json[:html])
 end
 
@@ -136,6 +135,5 @@ end
 
 @memoize function fetch_flickr(id)
     url = "https://www.flickr.com/services/oembed/?format=json&url=http%3A//www.flickr.com/photos/bees/$id"
-    response = HTTP.get(url)
-    json = JSON3.read(String(response.body))
+    json = JSON3.read(http_get(url))
 end

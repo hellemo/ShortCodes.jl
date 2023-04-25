@@ -5,8 +5,7 @@ end
 
 @memoize function fetch_twitter(id)
     url = "https://publish.twitter.com/oembed?url=https://twitter.com/andypiper/status/$id"
-    response = HTTP.get(url)
-    json = JSON3.read(String(response.body))
+    json = JSON3.read(http_get(url))
 end
 
 struct Twitter <: ShortCode
