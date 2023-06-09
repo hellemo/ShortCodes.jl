@@ -145,5 +145,5 @@ function strip(s)
 end
 
 function year(s)
-    return !isempty(s) && s != "\0" ? parse(Int, first(s, 4)) : s
+    return !isempty(s) && s != "" ? parse(Int, first(s, 4)) : s
 end
