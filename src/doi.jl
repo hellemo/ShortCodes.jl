@@ -73,8 +73,8 @@ end
     fetch_metadata(doi.doi)
 end
 @memoize function fetch_metadata(doi)
-    r = HTTP.get("https://w3id.org/oc/meta/api/v1/metadata/doi:$(doi)")
-    rj = JSON3.read(r.body)
+    r = http_get("https://w3id.org/oc/meta/api/v1/metadata/doi:$(doi)")
+    rj = JSON3.read(r)
     if isempty(rj)
         return metadata_template(doi)
     else
