@@ -83,8 +83,7 @@ end
 end
 fetch_citation_count(doi::AbstractDOI) = fetch_citation_count(doi.doi)
 @memoize function fetch_citation_count(doi)
-    r = HTTP.get("https://opencitations.net/index/api/v1/citation-count/$(doi)")
-    rj = JSON3.read(r.body)
+    rj = JSON3.read(http_get("https://opencitations.net/index/api/v1/citation-count/$(doi)"))
     return parse(Int, rj[1][:count])
 end
 
@@ -95,8 +94,7 @@ end
 end
 
 @memoize function fetch_shortdoi(doi::String)
-    r = HTTP.get("https://shortdoi.org/$(doi)?format=json")
-    return JSON3.read(r.body)
+    return JSON3.read(http_get("https://shortdoi.org/$(doi)?format=json"))
 end
 """
     expand(doi::ShortDOI)
@@ -104,8 +102,8 @@ end
 Get full DOI from doi.org
 """
 @memoize function expand(doi::ShortDOI)
-    r = HTTP.get("https://doi.org/api/handles/$(doi.shortdoi)")
-    return JSON3.read(r.body)[:values][2][:data][:value]
+    r = http_get("https://doi.org/api/handles/$(doi.shortdoi)")
+    return JSON3.read(r)[:values][2][:data][:value]
 end
 
 

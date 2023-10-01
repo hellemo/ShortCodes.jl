@@ -35,8 +35,7 @@ function kroki(krokitext, generator = "graphviz", format = "svg")
 end
 
 @memoize function fetch_kroki(krokitext, generator = "graphviz", format = "svg")
-    response = HTTP.get(kroki(krokitext, generator, format))
-    String(response.body)
+    String(http_get(kroki(krokitext, generator, format)))
 end
 
 function base64urlencode(text)
@@ -45,5 +44,5 @@ function base64urlencode(text)
 end
 
 function compress(text)
-    return transcode(ZlibCompressor, text)
+    return transcode(ZlibCompressor, codeunits(text))
 end

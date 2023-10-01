@@ -38,9 +38,8 @@ function Base.show(io::IO, ::MIME"text/html", video::Vimeo)
 end
 
 @memoize function vimeo(video_url)
-    url = "https://vimeo.com/api/oembed.json?url=$(HTTP.escapeuri(video_url))&maxheight=500&maxwidth=700&width=680&byline=false&portrait=false&title=false"
-    response = HTTP.get(url)
-    json = JSON3.read(String(response.body))
+    url = "https://vimeo.com/api/oembed.json?url=$(URIs.escapeuri(video_url))&maxheight=500&maxwidth=700&width=680&byline=false&portrait=false&title=false"
+    json = JSON3.read(http_get(url))
     return json[:html]
 end
 
