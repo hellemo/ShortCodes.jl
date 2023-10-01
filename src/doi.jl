@@ -59,12 +59,27 @@ function Base.show(io::IO, ::MIME"text/html", dois::Array{T} where {T<:AbstractD
     print(io, "</ol>")
 end
 
+"""
+    meta-data structure from API: https://w3id.org/oc/meta/api/v1/metadata/
+"""
+function metadata_template(doi::String)
+    fields = (:publisher, :pub_date, :page, :venue, :issue, :editor, :author, :id, :volume, :title, :type)
+    rj = Dict(f => "" for f in fields)
+    rj[:id] = doi
+    return rj
+end
+
 @memoize function fetch_metadata(doi::AbstractDOI)
     fetch_metadata(doi.doi)
 end
 @memoize function fetch_metadata(doi)
-    rj = JSON3.read(http_get("https://w3id.org/oc/meta/api/v1/metadata/doi:$(doi)"))
-    return rj[1]
+    r = HTTP.get("https://w3id.org/oc/meta/api/v1/metadata/doi:$(doi)")
+    rj = JSON3.read(r.body)
+    if isempty(rj)
+        return metadata_template(doi)
+    else
+        return rj[1]
+    end
 end
 fetch_citation_count(doi::AbstractDOI) = fetch_citation_count(doi.doi)
 @memoize function fetch_citation_count(doi)
@@ -103,7 +118,7 @@ end
 function emph_author(doi::EmDOI)
     emph_author(strip(doi.author), doi.highlight)
 end
-function emph_author(authors, author = "", em = "b")
+function emph_author(authors, author="", em="b")
     orcid = r", \d{4}-\d{4}-\d{4}-\d{4}"
     authors = replace(authors, orcid => "")
     if length(author) > 2
@@ -126,6 +141,7 @@ end
 function strip(s)
     return replace(s, r" \[(.*?)\]" => "")
 end
+
 function year(s)
-    return parse(Int, first(s, 4))
+    return !isempty(s) && s != "" ? parse(Int, first(s, 4)) : s
 end
