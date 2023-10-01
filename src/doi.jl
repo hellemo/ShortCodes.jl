@@ -64,7 +64,7 @@ end
 """
 function metadata_template(doi::String)
     fields = (:publisher, :pub_date, :page, :venue, :issue, :editor, :author, :id, :volume, :title, :type)
-    rj = Dict(f => "\u0000" for f in fields)
+    rj = Dict(f => "" for f in fields)
     rj[:id] = doi
     return rj
 end
