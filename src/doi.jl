@@ -63,7 +63,19 @@ end
     meta-data structure from API: https://w3id.org/oc/meta/api/v1/metadata/
 """
 function metadata_template(doi::String)
-    fields = (:publisher, :pub_date, :page, :venue, :issue, :editor, :author, :id, :volume, :title, :type)
+    fields = (
+        :publisher,
+        :pub_date,
+        :page,
+        :venue,
+        :issue,
+        :editor,
+        :author,
+        :id,
+        :volume,
+        :title,
+        :type,
+    )
     rj = Dict(f => "" for f in fields)
     rj[:id] = doi
     return rj
@@ -83,7 +95,8 @@ end
 end
 fetch_citation_count(doi::AbstractDOI) = fetch_citation_count(doi.doi)
 @memoize function fetch_citation_count(doi)
-    rj = JSON3.read(http_get("https://opencitations.net/index/api/v1/citation-count/$(doi)"))
+    rj =
+        JSON3.read(http_get("https://opencitations.net/index/api/v1/citation-count/$(doi)"))
     return parse(Int, rj[1][:count])
 end
 
@@ -118,7 +131,7 @@ end
 function emph_author(doi::EmDOI)
     emph_author(strip(doi.author), doi.highlight)
 end
-function emph_author(authors, author="", em="b")
+function emph_author(authors, author = "", em = "b")
     orcid = r", \d{4}-\d{4}-\d{4}-\d{4}"
     authors = replace(authors, orcid => "")
     if length(author) > 2
