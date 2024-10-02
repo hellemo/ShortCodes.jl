@@ -21,3 +21,28 @@ end
 function Base.show(io::IO, ::MIME"text/html", tweet::Twitter)
     print(io, twitter(tweet.id))
 end
+
+struct Bluesky <: ShortCode
+    full_url::AbstractString
+end
+
+@memoize function fetch_bluesky(full_url)
+    url = "https://embed.bsky.app/oembed/?url=$full_url"
+    try
+        json = JSON3.read(String(http_get(url)))
+        return json[:html]
+    catch err
+        contains(err.msg, "post not found") && return "<em>Post not found</em>"
+        contains(err.msg, "post is not public") && return "<em>Post is not public</em>"
+        return "<em>$err</em>"
+    end
+end
+
+function Base.show(io::IO, ::MIME"text/html", tweet::Bluesky)
+    print(io, fetch_bluesky(tweet.full_url))
+end
+
+function Base.show(io::IO, ::MIME"text/plain", tweet::Bluesky)
+    json = fetch_bluesky(tweet.full_url)
+    print(io, json)
+end
