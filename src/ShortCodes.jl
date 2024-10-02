@@ -11,11 +11,12 @@ using UUIDs
 abstract type ShortCode end
 
 function http_get(url; kwargs...)
-	io = IOBuffer()
-	Downloads.request(url; output=io, kwargs...)
-	read(seekstart(io))
+    io = IOBuffer()
+    Downloads.request(url; output = io, kwargs...)
+    read(seekstart(io))
 end
 
+include("extension_types.jl")
 include("doi.jl")
 include("twitter.jl")
 include("youtube.jl")
@@ -34,5 +35,6 @@ export Twitter
 export Vimeo
 export WebPage
 export YouTube
+export QR
 
 end # module

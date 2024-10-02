@@ -8,9 +8,16 @@ Base64 = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
 CodecZlib = "944b1d66-785c-5afd-91f1-9de20f533193"
 Downloads = "f43a241f-c20a-4ad4-852c-f6b1247861c6"
 JSON3 = "0f8b85d8-7281-11e9-16c2-39a750bddbf1"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 Memoize = "c03570c3-d221-55d1-a50c-7939bbd78826"
 URIs = "5c2747f8-b7ea-4ff2-ba2e-563bfd36b1d4"
 UUIDs = "cf7118a7-6976-5b1a-9a39-7adc72f591a4"
+
+[weakdeps]
+QRCoders = "f42e9828-16f3-11ed-2883-9126170b272d"
+
+[extensions]
+QRCodersExt = "QRCoders"
 
 [compat]
 CodecZlib = "0.7"
