@@ -1,6 +1,6 @@
 # ShortCodes
 
-Simply embed content in a [Pluto](https://github.com/fonsp/Pluto.jl) notebook using short codes, inspired by the [Hugo shortcodes](https://gohugo.io/content-management/shortcodes/).
+Simply embed content in a [Pluto](https://github.com/fonsp/Pluto.jl) notebook using short codes, inspired by the [Hugo shortcodes](https://gohugo.io/content-management/shortcodes/). `ShortCodes` should also work in other environments such as Jupyter, Olive.jl, Documenter.jl, Franklin and maybe more, as they all support rich display of types, but I have not tested this.
 
 The basic usage is shown below, check out the [example](https://raw.githack.com/hellemo/ShortCodes.jl/main/examples/static-demo.html) to get an impression of the resulting page.
 
@@ -21,6 +21,10 @@ Flickr(29110717138)
 
 # Show DOI info from opencitations.net
 DOI("10.1137/141000671")
+
+# Show QR code for text (QRCoders extension)
+using QRCoders
+QR(raw"https://docs.julialang.org/en/v1/")
 ```
 
 ## Note
