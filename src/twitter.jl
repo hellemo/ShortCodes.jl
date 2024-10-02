@@ -34,7 +34,7 @@ end
     catch err
         contains(err.msg, "post not found") && return "<em>Post not found</em>"
         contains(err.msg, "post is not public") && return "<em>Post is not public</em>"
-        return "<em>$err</em>"
+        return "<em>$(err.msg)</em>"
     end
 end
 
