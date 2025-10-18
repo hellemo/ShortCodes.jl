@@ -1,5 +1,5 @@
-struct QR{T<:AbstractString,I<:Number}
+struct QRC{T<:AbstractString,I<:Number}
     payload::T
     size::I
 end
-QR(s) = QR(s, 100)
+QRC(s) = QRC(s, 100)
