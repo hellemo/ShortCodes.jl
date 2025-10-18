@@ -25,12 +25,16 @@ end
 struct Bluesky <: ShortCode
     full_url::AbstractString
 end
+"""
+    Alias for `Bluesky`
+"""
+Bsky(url) = Bluesky(url) 
 
 @memoize function fetch_bluesky(full_url)
     url = "https://embed.bsky.app/oembed/?url=$full_url"
     try
-        json = JSON3.read(String(http_get(url)))
-        return json[:html]
+        json = JSON.parse(String(http_get(url)))
+        return json.html
     catch err
         contains(err.msg, "post not found") && return "<em>Post not found</em>"
         contains(err.msg, "post is not public") && return "<em>Post is not public</em>"

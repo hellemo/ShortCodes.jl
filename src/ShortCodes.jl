@@ -31,7 +31,7 @@ export Flickr
 export GraphViz
 export Mermaid
 export PlantUML
-export Twitter, Bluesky
+export Twitter, Bluesky, Bsky
 export Vimeo
 export WebPage
 export YouTube
