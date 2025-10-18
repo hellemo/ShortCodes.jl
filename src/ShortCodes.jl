@@ -35,6 +35,6 @@ export Twitter
 export Vimeo
 export WebPage
 export YouTube
-export QR
+export QRC
 
 end # module
