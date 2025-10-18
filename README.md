@@ -24,7 +24,7 @@ DOI("10.1137/141000671")
 
 # Show QR code for text (QRCoders extension)
 using QRCoders
-QR(raw"https://docs.julialang.org/en/v1/")
+QRCode(raw"https://docs.julialang.org/en/v1/")
 ```
 
 ## Note
