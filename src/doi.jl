@@ -27,7 +27,8 @@ function Base.getproperty(obj::AbstractDOI, sym::Symbol)
     elseif sym in [:volume, :citation_count, :issue] # integer types
         return parse(Int, fetch_metadata(obj)[string(sym)])
     elseif sym == :reference                                # DOI type
-        return split(fetch_metadata(obj)[string(sym)], ";") .|> x -> DOI(replace(x, " " => ""))
+        return split(fetch_metadata(obj)[string(sym)], ";") .|>
+               x -> DOI(replace(x, " " => ""))
     else # fallback to getfield
         return getfield(obj, sym)
     end
@@ -36,14 +37,17 @@ getdoi(obj::AbstractDOI) = getfield(obj, :doi)
 getdoi(obj::ShortDOI) = expand(obj)
 
 function Base.show(io::IO, ::MIME"text/plain", doi::AbstractDOI)
-    print(io, join((strip(doi.author), doi.title, string(doi.pub_date), format_doi(doi)), " "))
+    print(
+        io,
+        join((strip(doi.author), doi.title, string(doi.pub_date), format_doi(doi)), " "),
+    )
 end
 
 function Base.show(io::IO, ::MIME"text/html", doi::AbstractDOI)
     print(
         io,
-        "<div>$(emph_author(doi)) <em>$(doi.title)</em>, $(doi.journal) ($(doi.year))
-<a href=https://doi.org/$(format_doi(doi))>$(format_doi(doi))</a>, cited by $(fetch_citation_count(getdoi(doi)))</div>",
+        "<div>$(format_authors(doi)) <em>$(doi.title)</em>, $(doi.journal) ($(doi.year))
+<a href=https://doi.org/$(format_doi(doi))>$(format_doi(doi))</a>$(format_citations(doi))</div>",
     )
 end
 
@@ -52,8 +56,8 @@ function Base.show(io::IO, ::MIME"text/html", dois::Array{T} where {T<:AbstractD
     for doi in dois
         print(
             io,
-            "<li>$(emph_author(doi)) <em>$(doi.title)</em>, $(doi.journal) ($(doi.year))
-  <a href=https://doi.org/$(format_doi(doi))>$(format_doi(doi))</a>, cited by $(fetch_citation_count(getdoi(doi)))</li>",
+            "<li>$(format_authors(doi)) <em>$(doi.title)</em>, $(doi.journal) ($(doi.year))
+  <a href=https://doi.org/$(format_doi(doi))>$(format_doi(doi))</a>$(format_citations(doi))</li>",
         )
     end
     print(io, "</ol>")
@@ -84,7 +88,7 @@ end
 @memoize function fetch_metadata(doi::AbstractDOI)
     fetch_metadata(doi.doi)
 end
- @memoize function fetch_metadata(doi_string)
+@memoize function fetch_metadata(doi_string)
     r = http_get("https://w3id.org/oc/meta/api/v1/metadata/doi:$(doi_string)")
     rj = JSON.parse(r)
     if isempty(rj)
@@ -95,8 +99,9 @@ end
 end
 fetch_citation_count(doi::AbstractDOI) = fetch_citation_count(doi.doi)
 @memoize function fetch_citation_count(doi_string)
-    rj =
-        JSON.parse(http_get("https://opencitations.net/index/api/v1/citation-count/$(doi_string)"))
+    rj = JSON.parse(
+        http_get("https://opencitations.net/index/api/v1/citation-count/$(doi_string)"),
+    )
     return parse(Int, rj[1].count)
 end
 
@@ -121,35 +126,40 @@ end
 
 
 """
-    emph_author(authors, author="", em="b")
+    format_author(authors, author="", em="b")
 
 Add emphasis to selected author display (e.g. for CV use)
 """
-function emph_author(doi::AbstractDOI)
-    emph_author(strip(doi.author))
-end
-function emph_author(doi::EmDOI)
-    emph_author(strip(doi.author), doi.highlight)
-end
-function emph_author(authors, author = "", em = "b")
-    orcid = r", \d{4}-\d{4}-\d{4}-\d{4}"
-    authors = replace(authors, orcid => "")
-    if length(author) > 2
-        names = split(author)
-        lnfirst = names[end] * ", " * names[1]
-        short = names[end] * ", " * names[1][1] * "."
-        return replace(
-            replace(
-                replace(authors, author => "<$em>" * author * "</$em>"),
-                short => "<$em>" * short * "</$em>",
-            ),
-            lnfirst => "<$em>" * lnfirst * "</$em>",
-        )
-    else
-        return authors
+format_authors(doi::AbstractDOI) = format_authors(doi.author)
+format_authors(doi::EmDOI) = format_authors(doi.author, doi.highlight)
+function format_authors(authors, author = "XXXXX", em = "b")
+
+    orcid1 = r", \d{4}-\d{4}-\d{4}-\d{4}"
+    authors = replace(authors, orcid1 => "")
+    orcid2 = orcid1 = r"\s?orcid:\d{4}-\d{4}-\d{4}-\d{4}\s?"
+    authors = replace(authors, orcid2=>"")
+    omidra = r"\s?\[omid:ra/\d*\]"
+    authors = replace(authors, omidra => "")
+
+    if length(authors) > 2
+        names = split(authors, ";")
+        names = emph_author.(names, author, em)
+        if length(names) > _use_N_authors()
+            names = first(names, _use_N_authors())
+            push!(names, " et al.")
+            return join(names, ",", "")
+        end
     end
+    return join(names, ",", " and")
 end
 
+function emph_author(some_author, em_author = "", em = "b")
+    names = split(some_author, ",")
+    if contains(first(names), em_author)
+        return "<$em>$some_author</$em>"
+    end
+    return some_author
+end
 
 function strip(s)
     return replace(s, r" \[(.*?)\]" => "")
@@ -161,11 +171,20 @@ end
 
 # Set default formatting of DOI
 _use_short_doi(doi) = true
-
+_use_citations(doi) = true
+_use_N_authors() = typemax(Int)
 function format_doi(doi)
     if _use_short_doi(doi)
         return shortdoi(doi)
     else
         return doi.doi
+    end
+end
+
+function format_citations(doi)
+    if _use_citations(doi)
+        return ", cited by $(fetch_citation_count(getdoi(doi)))"
+    else
+        return ""
     end
 end

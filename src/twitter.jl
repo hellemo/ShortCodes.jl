@@ -28,7 +28,7 @@ end
 """
     Alias for `Bluesky`
 """
-Bsky(url) = Bluesky(url) 
+Bsky(url) = Bluesky(url)
 
 @memoize function fetch_bluesky(full_url)
     url = "https://embed.bsky.app/oembed/?url=$full_url"
