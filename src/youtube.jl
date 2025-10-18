@@ -112,8 +112,8 @@ end
 """
 function youtube(id)
     url = "https://youtube.com/oembed?url=http://www.youtube.com/watch?v=$id&format=json&maxwidth=600&maxheight=500"
-    json = JSON3.read(http_get(url))
-    return HTML(json[:html])
+    json = JSON.parse(http_get(url))
+    return HTML(json.html)
 end
 
 struct Flickr <: ShortCode
@@ -124,16 +124,16 @@ Flickr(url::String) = Flickr(parse(Int, split(url, "/")[6])) # This should be mo
 
 function Base.show(io::IO, ::MIME"text/plain", img::Flickr)
     json = fetch_flickr(img.id)
-    flickr_as_text = "$(json[:author_name]): $(json[:title])\n$(json[:web_page])"
+    flickr_as_text = "$(json.author_name): $(json.title)\n$(json.web_page)"
     print(io, flickr_as_text)
 end
 
 function Base.show(io::IO, ::MIME"text/html", img::Flickr)
     json = fetch_flickr(img.id)
-    print(io, json[:html])
+    print(io, json.html)
 end
 
 @memoize function fetch_flickr(id)
     url = "https://www.flickr.com/services/oembed/?format=json&url=http%3A//www.flickr.com/photos/bees/$id"
-    json = JSON3.read(http_get(url))
+    json = JSON.parse(http_get(url))
 end

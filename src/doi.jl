@@ -23,11 +23,11 @@ function Base.getproperty(obj::AbstractDOI, sym::Symbol)
     if sym == :journal
         return strip(obj.venue)
     elseif sym in [:author, :title, :page, :pub_date, :venue]   # string types
-        return fetch_metadata(obj)[sym]
+        return fetch_metadata(obj)[string(sym)]
     elseif sym in [:volume, :citation_count, :issue] # integer types
-        return parse(Int, fetch_metadata(obj)[sym])
+        return parse(Int, fetch_metadata(obj)[string(sym)])
     elseif sym == :reference                                # DOI type
-        return split(fetch_metadata(obj)[sym], ";") .|> x -> DOI(replace(x, " " => ""))
+        return split(fetch_metadata(obj)[string(sym)], ";") .|> x -> DOI(replace(x, " " => ""))
     else # fallback to getfield
         return getfield(obj, sym)
     end
@@ -36,14 +36,14 @@ getdoi(obj::AbstractDOI) = getfield(obj, :doi)
 getdoi(obj::ShortDOI) = expand(obj)
 
 function Base.show(io::IO, ::MIME"text/plain", doi::AbstractDOI)
-    print(io, join((doi.author, doi.title, string(doi.pub_date), shortdoi(doi)), " "))
+    print(io, join((strip(doi.author), doi.title, string(doi.pub_date), format_doi(doi)), " "))
 end
 
 function Base.show(io::IO, ::MIME"text/html", doi::AbstractDOI)
     print(
         io,
         "<div>$(emph_author(doi)) <em>$(doi.title)</em>, $(doi.journal) ($(doi.year))
-<a href=https://doi.org/$(shortdoi(doi))>$(shortdoi(doi))</a>, cited by $(fetch_citation_count(getdoi(doi)))</div>",
+<a href=https://doi.org/$(format_doi(doi))>$(format_doi(doi))</a>, cited by $(fetch_citation_count(getdoi(doi)))</div>",
     )
 end
 
@@ -53,7 +53,7 @@ function Base.show(io::IO, ::MIME"text/html", dois::Array{T} where {T<:AbstractD
         print(
             io,
             "<li>$(emph_author(doi)) <em>$(doi.title)</em>, $(doi.journal) ($(doi.year))
-  <a href=https://doi.org/$(shortdoi(doi))>$(shortdoi(doi))</a>, cited by $(fetch_citation_count(getdoi(doi)))</li>",
+  <a href=https://doi.org/$(format_doi(doi))>$(format_doi(doi))</a>, cited by $(fetch_citation_count(getdoi(doi)))</li>",
         )
     end
     print(io, "</ol>")
@@ -77,27 +77,27 @@ function metadata_template(doi::String)
         :type,
     )
     rj = Dict(f => "" for f in fields)
-    rj[:id] = doi
+    rj["id"] = doi
     return rj
 end
 
 @memoize function fetch_metadata(doi::AbstractDOI)
     fetch_metadata(doi.doi)
 end
-@memoize function fetch_metadata(doi)
-    r = http_get("https://w3id.org/oc/meta/api/v1/metadata/doi:$(doi)")
-    rj = JSON3.read(r)
+ @memoize function fetch_metadata(doi_string)
+    r = http_get("https://w3id.org/oc/meta/api/v1/metadata/doi:$(doi_string)")
+    rj = JSON.parse(r)
     if isempty(rj)
         return metadata_template(doi)
     else
-        return rj[1]
+        return first(rj)
     end
 end
 fetch_citation_count(doi::AbstractDOI) = fetch_citation_count(doi.doi)
-@memoize function fetch_citation_count(doi)
+@memoize function fetch_citation_count(doi_string)
     rj =
-        JSON3.read(http_get("https://opencitations.net/index/api/v1/citation-count/$(doi)"))
-    return parse(Int, rj[1][:count])
+        JSON.parse(http_get("https://opencitations.net/index/api/v1/citation-count/$(doi_string)"))
+    return parse(Int, rj[1].count)
 end
 
 @memoize shortdoi(doi::AbstractDOI) = fetch_shortdoi(doi).ShortDOI
@@ -106,8 +106,8 @@ end
     fetch_shortdoi(doi.doi)
 end
 
-@memoize function fetch_shortdoi(doi::String)
-    return JSON3.read(http_get("https://shortdoi.org/$(doi)?format=json"))
+@memoize function fetch_shortdoi(doi_string::String)
+    return JSON.parse(http_get("https://shortdoi.org/$(doi_string)?format=json"))
 end
 """
     expand(doi::ShortDOI)
@@ -116,7 +116,7 @@ Get full DOI from doi.org
 """
 @memoize function expand(doi::ShortDOI)
     r = http_get("https://doi.org/api/handles/$(doi.shortdoi)")
-    return JSON3.read(r)[:values][2][:data][:value]
+    return JSON.parse(r).values[2].data.value
 end
 
 
@@ -157,4 +157,15 @@ end
 
 function year(s)
     return !isempty(s) && s != "" ? parse(Int, first(s, 4)) : s
+end
+
+# Set default formatting of DOI
+_use_short_doi(doi) = true
+
+function format_doi(doi)
+    if _use_short_doi(doi)
+        return shortdoi(doi)
+    else
+        return doi.doi
+    end
 end

@@ -39,8 +39,8 @@ end
 
 @memoize function vimeo(video_url)
     url = "https://vimeo.com/api/oembed.json?url=$(URIs.escapeuri(video_url))&maxheight=500&maxwidth=700&width=680&byline=false&portrait=false&title=false"
-    json = JSON3.read(http_get(url))
-    return json[:html]
+    json = JSON.parse(http_get(url))
+    return json.html
 end
 
 function vimeo(video_id::Integer)

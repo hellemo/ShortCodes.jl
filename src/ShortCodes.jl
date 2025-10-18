@@ -4,7 +4,7 @@ using Base64
 using CodecZlib
 using Downloads
 using URIs
-using JSON3
+using JSON
 using Memoize
 using UUIDs
 

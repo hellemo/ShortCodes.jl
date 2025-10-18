@@ -1,13 +1,13 @@
 name = "ShortCodes"
 uuid = "f62ebe17-55c5-4640-972f-b59c0dd11ccf"
-authors = ["Lars Hellemo <hellemo@gmail.com> "]
 version = "0.4.0"
+authors = ["Lars Hellemo <hellemo@gmail.com> "]
 
 [deps]
 Base64 = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
 CodecZlib = "944b1d66-785c-5afd-91f1-9de20f533193"
 Downloads = "f43a241f-c20a-4ad4-852c-f6b1247861c6"
-JSON3 = "0f8b85d8-7281-11e9-16c2-39a750bddbf1"
+JSON = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 Memoize = "c03570c3-d221-55d1-a50c-7939bbd78826"
 URIs = "5c2747f8-b7ea-4ff2-ba2e-563bfd36b1d4"
@@ -21,7 +21,7 @@ QRCodersExt = "QRCoders"
 
 [compat]
 CodecZlib = "0.7"
-JSON3 = "1"
+JSON = "1.2.0"
 Memoize = "0.4"
 URIs = "1"
 julia = "^1.10"
