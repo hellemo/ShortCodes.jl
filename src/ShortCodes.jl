@@ -4,7 +4,7 @@ using Base64
 using CodecZlib
 using Downloads
 using URIs
-using JSON3
+using JSON
 using Memoize
 using UUIDs
 
@@ -35,6 +35,6 @@ export Twitter, Bluesky
 export Vimeo
 export WebPage
 export YouTube
-export QR
+export QRC
 
 end # module
