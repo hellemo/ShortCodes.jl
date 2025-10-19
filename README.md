@@ -11,8 +11,6 @@ using ShortCodes
 
 # Embed tweet by id
 Twitter(1314967811626872842)
-# Embed Bluesky post by url
-Bluesky("https://bsky.app/profile/hellemo.bsky.social/post/3l4tw2l7c2c26")
 
 # Embed youtube video by id and seek to start 
 # time and pause to show custom still image
@@ -26,7 +24,7 @@ DOI("10.1137/141000671")
 
 # Show QR code for text (QRCoders extension)
 using QRCoders
-QRCode(raw"https://docs.julialang.org/en/v1/")
+QRC(raw"https://docs.julialang.org/en/v1/")
 ```
 
 ## Note
