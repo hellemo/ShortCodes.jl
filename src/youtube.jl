@@ -1,5 +1,3 @@
-
-
 struct YouTube <: ShortCode
     id::String
     seekto::Int32
@@ -136,4 +134,32 @@ end
 @memoize function fetch_flickr(id)
     url = "https://www.flickr.com/services/oembed/?format=json&url=http%3A//www.flickr.com/photos/bees/$id"
     json = JSON.parse(http_get(url))
+end
+
+
+struct LiteYouTube <: ShortCode
+    id::String
+    seekto::Int32
+end
+
+function Base.show(io::IO, ::MIME"text/plain", video::LiteYouTube)
+    video_as_text = "https://www.youtube.com/watch?v=$(video.id)&start=$(video.seekto)"
+    print(io, video_as_text)
+end
+
+function Base.show(io::IO, ::MIME"text/html", video::LiteYouTube)
+    print(io, liteyoutube(video.id, video.seekto))
+end
+
+
+LiteYouTube(id) = LiteYouTube(id, 0)
+"""
+ Embed youtube video id that seeks seekto seconds into the video and pauses there to 
+    make it possible to show a particular still from the video by default.
+"""
+@memoize function liteyoutube(id, seekto)
+    """<script src="https://cdn.jsdelivr.net/npm/lite-youtube-embed@0.2.0/src/lite-yt-embed.js" integrity="sha256-wwYlfEzWnCf2nFlIQptfFKdUmBeH5d3G7C2352FdpWE=" crossorigin="anonymous" defer></script>
+    	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lite-youtube-embed@0.2.0/src/lite-yt-embed.css" integrity="sha256-99PgDZnzzjO63EyMRZfwIIA+i+OS2wDx6k+9Eo7JDKo=" crossorigin="anonymous">
+    	<lite-youtube videoid=$(id) params="modestbranding=1&rel=0&start=$(string(seekto))"></lite-youtube>
+    """
 end
