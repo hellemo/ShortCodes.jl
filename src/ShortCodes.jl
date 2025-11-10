@@ -34,7 +34,7 @@ export PlantUML
 export Twitter, Bluesky, Bsky
 export Vimeo
 export WebPage
-export YouTube
+export YouTube, YouTubeLite
 export QRC
 
 end # module
