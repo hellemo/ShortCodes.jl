@@ -137,31 +137,31 @@ end
 end
 
 
-struct LiteYouTube <: ShortCode
+struct YouTubeLite <: ShortCode
     id::String
     seekto::Int32
 end
 
-function Base.show(io::IO, ::MIME"text/plain", video::LiteYouTube)
+function Base.show(io::IO, ::MIME"text/plain", video::YouTubeLite)
     video_as_text = "https://www.youtube.com/watch?v=$(video.id)&start=$(video.seekto)"
     print(io, video_as_text)
 end
 
-function Base.show(io::IO, ::MIME"text/html", video::LiteYouTube)
-    print(io, liteyoutube(video.id, video.seekto))
+function Base.show(io::IO, ::MIME"text/html", video::YouTubeLite)
+    print(io, youtubelite(video.id, video.seekto))
 end
 
 
-LiteYouTube(id) = LiteYouTube(id, 0)
+YouTubeLite(id) = YouTubeLite(id, 0)
 """
  Embed youtube video id that seeks seekto seconds into the video and pauses there to 
     make it possible to show a particular still from the video by default.
 """
 
-function liteyoutube(id, seekto)
+function youtubelite(id, seekto)
     """
-    <script src="https://cdn.jsdelivr.net/npm/lite-youtube-embed@0.3.3/src/lite-yt-embed.js" integrity="sha256-t8Thbv2D6x0AC5rMk+Ydz589Zq4lp8ZC4iVfNNdxs5U=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lite-youtube-embed@0.3.3/src/lite-yt-embed.css" integrity="sha256-qwd4FE0YEnXtN1D9SlLRzgZ35aJTclA5jg1poUQA3dE=" crossorigin="anonymous">       
+    <script src="https://cdn.jsdelivr.net/npm/lite-youtube-embed@0.3.4/src/lite-yt-embed.js" integrity="sha256-UyTkvYZC/3h/rCA7QBuOG/oGQCKOOJ4WOotzj/Dd70Y=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lite-youtube-embed@0.3.4/src/lite-yt-embed.css" integrity="sha256-w5MMSroouA6UcvWn3fonDvoZPvDX3dhQM0Vltk00dPs=" crossorigin="anonymous">       
     <lite-youtube videoid=$(id) params="modestbranding=1&rel=0&start=$(string(seekto))"></lite-youtube>
     """
 end
