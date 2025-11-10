@@ -1,5 +1,15 @@
 # ShortCodes Release Notes
 
+## v0.4.1 (2025-11-10)
+
+* Add support to show QRC as SVG to scale better
+
+## v0.4.0 (2025-10-18)
+
+* Rename QR code to QRC to avoid naming clashes
+* Support some customisation of DOI display
+* Switch to JSON@1.0 from JSON3
+
 ## v0.3.2 (2021-04-18)
 
 * Add DOI support via [opencitations](https://opencitations.net) and [doi.org](https://doi.org)
