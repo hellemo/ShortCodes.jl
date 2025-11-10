@@ -1,5 +1,9 @@
 # ShortCodes Release Notes
 
+## v0.4.2 (2025-11-10)
+
+* Add support for YouTubeLite using lite-youtube-embed. Thanks @fonsp.
+
 ## v0.4.1 (2025-11-10)
 
 * Add support to show QRC as SVG to scale better
