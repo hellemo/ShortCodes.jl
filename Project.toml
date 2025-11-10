@@ -1,6 +1,6 @@
 name = "ShortCodes"
 uuid = "f62ebe17-55c5-4640-972f-b59c0dd11ccf"
-version = "0.4.0"
+version = "0.4.1"
 authors = ["Lars Hellemo <hellemo@gmail.com> "]
 
 [deps]
