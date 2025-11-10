@@ -157,9 +157,11 @@ LiteYouTube(id) = LiteYouTube(id, 0)
  Embed youtube video id that seeks seekto seconds into the video and pauses there to 
     make it possible to show a particular still from the video by default.
 """
-@memoize function liteyoutube(id, seekto)
-    """<script src="https://cdn.jsdelivr.net/npm/lite-youtube-embed@0.2.0/src/lite-yt-embed.js" integrity="sha256-wwYlfEzWnCf2nFlIQptfFKdUmBeH5d3G7C2352FdpWE=" crossorigin="anonymous" defer></script>
-    	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lite-youtube-embed@0.2.0/src/lite-yt-embed.css" integrity="sha256-99PgDZnzzjO63EyMRZfwIIA+i+OS2wDx6k+9Eo7JDKo=" crossorigin="anonymous">
-    	<lite-youtube videoid=$(id) params="modestbranding=1&rel=0&start=$(string(seekto))"></lite-youtube>
+
+function liteyoutube(id, seekto)
+    """
+    <script src="https://cdn.jsdelivr.net/npm/lite-youtube-embed@0.3.3/src/lite-yt-embed.js" integrity="sha256-t8Thbv2D6x0AC5rMk+Ydz589Zq4lp8ZC4iVfNNdxs5U=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lite-youtube-embed@0.3.3/src/lite-yt-embed.css" integrity="sha256-qwd4FE0YEnXtN1D9SlLRzgZ35aJTclA5jg1poUQA3dE=" crossorigin="anonymous">       
+    <lite-youtube videoid=$(id) params="modestbranding=1&rel=0&start=$(string(seekto))"></lite-youtube>
     """
 end
