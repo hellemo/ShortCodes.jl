@@ -9,18 +9,25 @@ The basic usage is shown below, check out the [example](https://raw.githack.com/
 ```julia
 using ShortCodes
 
-# Embed tweet by id
-Twitter(1314967811626872842)
+# Embed Bluesky post by url
+Bluesky("https://bsky.app/profile/jbytecode.bsky.social/post/3m2pe3qcxjc27")
 
 # Embed youtube video by id and seek to start 
 # time and pause to show custom still image
 YouTube("IAF8DjrQSSk", 2, 30) # 2 min 30 sec
+
+# Embed youtube video showing only default thumbnail
+# based on lite-youtube-embeds
+YouTubeLite("IAF8DjrQSSk")
 
 # Embed Flickr image by id (or by url)
 Flickr(29110717138)
 
 # Show DOI info from opencitations.net
 DOI("10.1137/141000671")
+
+# Embed a web page:
+WebPage("https://julialang.org/downloads/#current_stable_release")
 
 # Show QR code for text (QRCoders extension)
 using QRCoders
