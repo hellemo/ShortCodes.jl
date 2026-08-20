@@ -21,6 +21,8 @@ end
     @test ShortCodes.format_authors("Ada Lovelace;Grace Hopper") == "Ada Lovelace and Grace Hopper"
     @test ShortCodes.format_authors("Ada Lovelace;Grace Hopper;Katherine Johnson") ==
           "Ada Lovelace, Grace Hopper and Katherine Johnson"
+    @test ShortCodes.format_authors("") == ""
+    @test ShortCodes.format_authors("Ada Lovelace; Grace Hopper") == "Ada Lovelace and Grace Hopper"
 end
 
 @testset "DOI backend tests" begin

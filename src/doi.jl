@@ -225,8 +225,8 @@ function format_authors(authors, author="XXXXX", em="b")
     omidra = r"\s?\[omid:ra/\d*\]"
     authors = replace(authors, omidra => "")
 
-    if length(authors) > 2
-        names = split(authors, ";")
+    names = Base.strip(authors) == "" ? String[] : Base.strip.(split(authors, ";"))
+    if length(names) > 0
         names = emph_author.(names, author, em)
         if length(names) > _use_N_authors()
             names = first(names, _use_N_authors())
