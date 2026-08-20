@@ -18,6 +18,7 @@ end
     io = IOBuffer()
     show(io, MIME("text/html"), emjulia)
     @test occursin("<b> Karpinski, Stefan</b>", String(take!(io)))
+    @test ShortCodes.format_authors("Ada Lovelace;Grace Hopper") == "Ada Lovelace and Grace Hopper"
 end
 
 @testset "DOI backend tests" begin

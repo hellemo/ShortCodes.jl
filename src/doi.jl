@@ -234,7 +234,7 @@ function format_authors(authors, author="XXXXX", em="b")
             return join(names, ",", "")
         end
     end
-    return join(names, ",", " and")
+    return join(names, ",", " and ")
 end
 
 function emph_author(some_author, em_author="", em="b")
