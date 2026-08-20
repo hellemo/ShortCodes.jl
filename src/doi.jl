@@ -46,7 +46,7 @@ function Base.getproperty(obj::AbstractDOI, sym::Symbol)
         return parse_int_or_empty(fetch_metadata(obj)[string(sym)])
     elseif sym == :reference                                # DOI type
         return split(fetch_metadata(obj)[string(sym)], ";") .|>
-               x -> DOI(replace(x, " " => ""))
+               x -> DOI(replace(x, " " => ""); backend=obj.backend)
     else # fallback to getfield
         return getfield(obj, sym)
     end
