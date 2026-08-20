@@ -1,11 +1,16 @@
-using ShortCodes
-using Test
+using TestItemRunner
 
-@testset "Kroki tests" begin
+@testitem "Kroki" begin
+    using ShortCodes
+    using Test
+
     @test ShortCodes.kroki("digraph G {Hello->World}") == "https://kroki.io/graphviz/svg/eJxLyUwvSizIUHBXqPZIzcnJ17ULzy_KSakFAGxACMY="
 end
 
-@testset "DOI tests" begin
+@testitem "DOI" begin
+    using ShortCodes
+    using Test
+
     julia = DOI("10.1137/141000671")
 
     @test julia.doi == "10.1137/141000671"
@@ -17,7 +22,7 @@ end
     @test emjulia.highlight == "Karpinski"
     io = IOBuffer()
     show(io, MIME("text/html"), emjulia)
-    @test occursin("<b> Karpinski, Stefan</b>", String(take!(io)))
+    @test occursin("<b>Karpinski, Stefan</b>", String(take!(io)))
     @test ShortCodes.format_authors("Ada Lovelace;Grace Hopper") == "Ada Lovelace and Grace Hopper"
     @test ShortCodes.format_authors("Ada Lovelace;Grace Hopper;Katherine Johnson") ==
           "Ada Lovelace, Grace Hopper and Katherine Johnson"
@@ -25,7 +30,10 @@ end
     @test ShortCodes.format_authors("Ada Lovelace; Grace Hopper") == "Ada Lovelace and Grace Hopper"
 end
 
-@testset "DOI backend tests" begin
+@testitem "DOI backend" begin
+    using ShortCodes
+    using Test
+
     doi = DOI("10.1137/141000671")
     openalex_doi = DOI("10.1137/141000671"; backend=:openalex)
 
@@ -70,3 +78,5 @@ end
     @test ShortCodes.parse_int_or_empty("") == ""
     @test ShortCodes.parse_int_or_empty("12") == 12
 end
+
+@run_package_tests
