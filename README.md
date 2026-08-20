@@ -23,8 +23,16 @@ YouTubeLite("IAF8DjrQSSk")
 # Embed Flickr image by id (or by url)
 Flickr(29110717138)
 
-# Show DOI info from opencitations.net
+# Show DOI info from OpenCitations (the default backend)
 DOI("10.1137/141000671")
+
+# Use OpenAlex for richer work metadata and OpenAlex citation counts
+DOI("10.1137/141000671"; backend = :openalex)
+
+The OpenAlex backend currently provides the same rendered DOI fields as the
+OpenCitations backend, including authors, title, venue, publication date,
+volume, issue, pages, and citation count. OpenCitations remains the default;
+backend failures are not silently replaced by another backend.
 
 # Embed a web page:
 WebPage("https://julialang.org/downloads/#current_stable_release")
