@@ -22,7 +22,7 @@ end
     @test emjulia.highlight == "Karpinski"
     io = IOBuffer()
     show(io, MIME("text/html"), emjulia)
-    @test occursin("<b> Karpinski, Stefan</b>", String(take!(io)))
+    @test occursin("<b>Karpinski, Stefan</b>", String(take!(io)))
     @test ShortCodes.format_authors("Ada Lovelace;Grace Hopper") == "Ada Lovelace and Grace Hopper"
     @test ShortCodes.format_authors("Ada Lovelace;Grace Hopper;Katherine Johnson") ==
           "Ada Lovelace, Grace Hopper and Katherine Johnson"
